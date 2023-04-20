@@ -118,6 +118,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         controller.add(pauseMenu);
         hero = new MyHero();
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
+        Save.laden();
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();
     }
@@ -135,6 +136,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
         getHero().ifPresent(this::placeOnLevelStart);
+        Save.speichern();
     }
 
     private void manageEntitiesSets() {
@@ -227,6 +229,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return entities;
     }
 
+    pubblic static void setEntities(Set<Entity> entities) {
+        Game.entities = entities;
+    }
+
     /**
      * @return Set with all entities that will be added to the game next frame
      */
@@ -246,6 +252,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
      */
     public static Optional<Entity> getHero() {
         return Optional.ofNullable(hero);
+    }
+
+    public static void getHero(Entity hero) {
+        Game.hero = hero;
     }
 
     /**
