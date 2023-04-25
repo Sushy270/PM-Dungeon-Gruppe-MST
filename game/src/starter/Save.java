@@ -1,12 +1,18 @@
+package starter;
+
+import ecs.entities.Entity;
+import level.LevelAPI;
+import java.util.Set;
+
 public class Save
 {
 	private Save(){}
 
 	public static void speichern()
 	{
-		Entity hero = Game.getHero();
+//        Game.getHero().ifPresent();
 		Set<Entity> entities = Game.getEntities();
-		LevelAPI api = Game.getAPI();
+//		LevelAPI api = Game.getAPI();
 		// implementation
 	}
 

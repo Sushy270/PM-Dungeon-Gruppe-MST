@@ -1,8 +1,9 @@
-package game.src.ecs.entities;
+package ecs.entities;
 
 import ecs.components.PositionComponent;
 import ecs.components.AnimationComponent;
 import graphic.Animation;
+import dslToGame.AnimationBuilder;
 
 public class MyHero extends Entity
 {
@@ -12,8 +13,8 @@ public class MyHero extends Entity
 
 		new PositionComponent(this, 0, 0);
 
-		Animation idleRight = AnimationBuilder.buildAnimatoin("character/knight/idleRight");
-		Animation idleLeft = AnimationBuilder.buildAnimatoin("character/knight/idleLeft");
+		Animation idleRight = AnimationBuilder.buildAnimation("character/knight/idleRight");
+		Animation idleLeft = AnimationBuilder.buildAnimation("character/knight/idleLeft");
 		new AnimationComponent(this, idleLeft, idleRight);
 	}
 }

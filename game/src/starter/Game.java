@@ -16,7 +16,6 @@ import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
 import ecs.entities.Entity;
 import ecs.entities.Hero;
-import ecs.entities.MyHero;
 import ecs.systems.*;
 import graphic.DungeonCamera;
 import graphic.Painter;
@@ -116,7 +115,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         controller.add(systems);
         pauseMenu = new PauseMenu<>();
         controller.add(pauseMenu);
-        hero = new MyHero();
+        hero = new Hero();
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         Save.laden();
         levelAPI.loadLevel(LEVELSIZE);
@@ -229,10 +228,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return entities;
     }
 
-    pubblic static void setEntities(Set<Entity> entities) {
-        Game.entities = entities;
-    }
-
     /**
      * @return Set with all entities that will be added to the game next frame
      */
@@ -254,9 +249,9 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return Optional.ofNullable(hero);
     }
 
-    public static void getHero(Entity hero) {
-        Game.hero = hero;
-    }
+//    public static void getHero(Entity hero) {
+//        Game.hero = hero;
+//    }
 
     /**
      * set the reference of the playable character careful: old hero will not be removed from the
