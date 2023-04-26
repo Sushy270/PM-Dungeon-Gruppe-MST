@@ -9,6 +9,8 @@ import ecs.entities.Entity;
 import ecs.tools.interaction.InteractionTool;
 import starter.Game;
 
+import java.util.ArrayList;
+
 /** Used to control the player */
 public class PlayerSystem extends ECS_System {
 
@@ -22,15 +24,55 @@ public class PlayerSystem extends ECS_System {
                 .forEach(this::checkKeystroke);
     }
 
-    private void checkKeystroke(KSData ksd) {
-        if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_UP.get()))
+    // isKeyPressed expects an Integer, so that is what we save
+    private ArrayList<Integer> keyStrokeRanking = new ArrayList<>();
+
+    private void updateKeyStrokeRanking(Integer keyStroke)
+    {
+        if(keyStrokeRanking.contains(keyStroke)
+        && !Gdx.input.isKeyPressed(keyStroke))
+            keyStrokeRanking.remove(keyStroke);
+
+        else if(!keyStrokeRanking.contains(keyStroke)
+            && Gdx.input.isKeyPressed(keyStroke))
+            keyStrokeRanking.add(keyStroke);
+    }
+
+    private void setVelocity(KSData ksd)
+    {
+        Integer current;
+        if(keyStrokeRanking.isEmpty())
+            current = null;
+        else
+            current = keyStrokeRanking.get(keyStrokeRanking.size() - 1);
+        if(current == KeyboardConfig.MOVEMENT_UP.get())
             ksd.vc.setCurrentYVelocity(1 * ksd.vc.getYVelocity());
-        else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_DOWN.get()))
+        else if (current == KeyboardConfig.MOVEMENT_DOWN.get())
             ksd.vc.setCurrentYVelocity(-1 * ksd.vc.getYVelocity());
-        else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_RIGHT.get()))
+        else if (current == KeyboardConfig.MOVEMENT_RIGHT.get())
             ksd.vc.setCurrentXVelocity(1 * ksd.vc.getXVelocity());
-        else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_LEFT.get()))
+        else if (current == KeyboardConfig.MOVEMENT_LEFT.get())
             ksd.vc.setCurrentXVelocity(-1 * ksd.vc.getXVelocity());
+    }
+
+    private void checkKeystroke(KSData ksd) {
+//        if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_UP.get()))
+//            ksd.vc.setCurrentYVelocity(1 * ksd.vc.getYVelocity());
+//        else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_DOWN.get()))
+//            ksd.vc.setCurrentYVelocity(-1 * ksd.vc.getYVelocity());
+//        else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_RIGHT.get()))
+//            ksd.vc.setCurrentXVelocity(1 * ksd.vc.getXVelocity());
+//        else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_LEFT.get()))
+//            ksd.vc.setCurrentXVelocity(-1 * ksd.vc.getXVelocity());
+
+        // KeyStrokeRanking updaten
+        updateKeyStrokeRanking(KeyboardConfig.MOVEMENT_UP.get());
+        updateKeyStrokeRanking(KeyboardConfig.MOVEMENT_DOWN.get());
+        updateKeyStrokeRanking(KeyboardConfig.MOVEMENT_RIGHT.get());
+        updateKeyStrokeRanking(KeyboardConfig.MOVEMENT_LEFT.get());
+
+        // letzter Eintrag soll ausgeführt werden
+        setVelocity(ksd);
 
         if (Gdx.input.isKeyPressed(KeyboardConfig.INTERACT_WORLD.get()))
             InteractionTool.interactWithClosestInteractable(ksd.e);
