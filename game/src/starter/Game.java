@@ -14,8 +14,11 @@ import controller.AbstractController;
 import controller.SystemController;
 import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
+import ecs.components.ai.idle.PatrouilleWalk;
+import ecs.components.ai.idle.RadiusWalk;
 import ecs.entities.Entity;
 import ecs.entities.Hero;
+import ecs.entities.Monster;
 import ecs.systems.*;
 import graphic.DungeonCamera;
 import graphic.Painter;
@@ -72,7 +75,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     public static ILevel currentLevel;
     private static PauseMenu<Actor> pauseMenu;
     private static Entity hero;
+    private static Monster monster;
     private Logger gameLogger;
+
+    private PatrouilleWalk p;
 
     public static void main(String[] args) {
         // start the game
@@ -134,6 +140,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
         getHero().ifPresent(this::placeOnLevelStart);
+        monster = new Monster();
     }
 
     private void manageEntitiesSets() {
