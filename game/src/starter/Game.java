@@ -20,6 +20,8 @@ import ecs.systems.*;
 import graphic.DungeonCamera;
 import graphic.Painter;
 import graphic.hud.PauseMenu;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
@@ -69,10 +71,13 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     /** List of all Systems in the ECS */
     public static SystemController systems;
 
+    // is a TileLevel Objekt
     public static ILevel currentLevel;
     private static PauseMenu<Actor> pauseMenu;
     private static Entity hero;
     private Logger gameLogger;
+
+    private Save save;
 
     public static void main(String[] args) {
         // start the game
@@ -99,6 +104,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelAPI.update();
         controller.forEach(AbstractController::update);
         camera.update();
+//        System.out.println(currentLevel.toString());
     }
 
     /** Called once at the beginning of the game. */
@@ -117,8 +123,12 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         controller.add(pauseMenu);
         hero = new Hero();
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
-        Save.laden();
-        levelAPI.loadLevel(LEVELSIZE);
+        save = new Save();
+        try {
+            save.laden(levelAPI);
+        } catch (FileNotFoundException e) {
+            levelAPI.loadLevel(LEVELSIZE);
+        }
         createSystems();
     }
 
@@ -130,12 +140,13 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) togglePause();
     }
 
+    boolean toggle = false;
     @Override
     public void onLevelLoad() {
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
         getHero().ifPresent(this::placeOnLevelStart);
-        Save.speichern();
+        save.speichern(currentLevel);
     }
 
     private void manageEntitiesSets() {

@@ -3,6 +3,8 @@ package level.elements;
 import ecs.components.PositionComponent;
 import ecs.entities.Entity;
 import java.util.Random;
+import java.util.logging.Level;
+
 import level.elements.tile.Tile;
 import level.tools.Coordinate;
 import level.tools.LevelElement;
@@ -14,6 +16,8 @@ public interface ITileable extends IPathable {
      * @return The layout of the level
      */
     Tile[][] getLayout();
+
+    LevelElement[][] getLayoutLE();
 
     /**
      * Get a tile on the global position.
