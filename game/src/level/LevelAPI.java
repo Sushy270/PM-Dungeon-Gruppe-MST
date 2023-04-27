@@ -21,6 +21,7 @@ public class LevelAPI {
     private IGenerator gen;
     private ILevel currentLevel;
     private final Logger levelAPI_logger = Logger.getLogger(this.getClass().getName());
+    private static int levelnummer = 0;
 
     /**
      * @param batch Batch on which to draw.
@@ -129,5 +130,12 @@ public class LevelAPI {
     public void setLevel(ILevel level) {
         currentLevel = level;
         onLevelLoader.onLevelLoad();
+    }
+
+    public static void addlevelnummer(){
+        levelnummer++;
+    }
+    public static int getlevelnummer(){
+        return levelnummer;
     }
 }
