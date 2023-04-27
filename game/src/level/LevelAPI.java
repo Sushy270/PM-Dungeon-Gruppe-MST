@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 import level.elements.ILevel;
+import level.elements.TileLevel;
 import level.elements.tile.Tile;
 import level.generator.IGenerator;
 import level.tools.DesignLabel;
@@ -17,7 +18,11 @@ import level.tools.LevelSize;
 public class LevelAPI {
     private final SpriteBatch batch;
     private final Painter painter;
+
+    // This is the fucking game class
     private final IOnLevelLoader onLevelLoader;
+
+    //Wallgenerator
     private IGenerator gen;
     private ILevel currentLevel;
     private final Logger levelAPI_logger = Logger.getLogger(this.getClass().getName());
@@ -45,8 +50,19 @@ public class LevelAPI {
      * @param size The size that the level should have
      * @param label The design that the level should have
      */
+
+    boolean toggle = false;
+    LevelElement[][] tempLayout;
+    int tempIndex;
     public void loadLevel(LevelSize size, DesignLabel label) {
-        currentLevel = gen.getLevel(label, size);
+//        if(!toggle) {
+            currentLevel = gen.getLevel(label, size);
+//            tempLayout = currentLevel.getLayoutLE();
+//            Tile tempStartTile = currentLevel.getStartTile();
+//            currentLevel.getFloorTiles().indexOf(tempStartTile);
+//            toggle = !toggle;}
+//
+//        currentLevel = new TileLevel(tempLayout, label, tempIndex);
         onLevelLoader.onLevelLoad();
         levelAPI_logger.info("A new level was loaded.");
     }
@@ -84,6 +100,11 @@ public class LevelAPI {
      */
     public ILevel getCurrentLevel() {
         return currentLevel;
+    }
+
+    public void setCurrentLevel(ILevel currentLevel)
+    {
+        this.currentLevel = currentLevel;
     }
 
     protected void drawLevel() {

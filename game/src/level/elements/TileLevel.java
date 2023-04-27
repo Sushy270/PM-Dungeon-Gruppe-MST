@@ -3,6 +3,8 @@ package level.elements;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+
 import level.elements.astar.TileConnection;
 import level.elements.astar.TileHeuristic;
 import level.elements.tile.*;
@@ -21,6 +23,9 @@ public class TileLevel implements ILevel {
     protected Tile startTile;
     protected int nodeCount = 0;
     protected Tile[][] layout;
+
+    // You could also convert layout back to LevelElement and return that
+    protected LevelElement[][] layoutLE;
 
     protected ArrayList<FloorTile> floorTiles = new ArrayList<>();
     protected ArrayList<WallTile> wallTiles = new ArrayList<>();
@@ -52,6 +57,20 @@ public class TileLevel implements ILevel {
      */
     public TileLevel(LevelElement[][] layout, DesignLabel designLabel) {
         this(convertLevelElementToTile(layout, designLabel));
+        this.layoutLE = layout;
+    }
+
+    /**
+     * Create a new Level with saved Parameters
+     *
+     * @param layout The layout of the Level
+     * @param designLabel The design the level should have
+     * @param startTile The Tile the Player should start on
+     */
+    public TileLevel(LevelElement[][] layout, DesignLabel designLabel, int startTile) {
+        this(convertLevelElementToTile(layout, designLabel));
+        this.startTile = this.floorTiles.get(startTile);
+        this.layoutLE = layout;
     }
 
     private void putTilesInLists() {
@@ -237,6 +256,9 @@ public class TileLevel implements ILevel {
     public Tile[][] getLayout() {
         return layout;
     }
+
+    @Override
+    public LevelElement[][] getLayoutLE() {return layoutLE;}
 
     @Override
     public Tile getStartTile() {
