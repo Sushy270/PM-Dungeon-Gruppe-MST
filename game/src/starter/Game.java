@@ -14,8 +14,10 @@ import controller.AbstractController;
 import controller.SystemController;
 import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
-import ecs.entities.Entity;
-import ecs.entities.Hero;
+import ecs.components.ai.idle.PatrouilleWalk;
+import ecs.components.ai.idle.RadiusWalk;
+import ecs.entities.*;
+
 import ecs.systems.*;
 import graphic.DungeonCamera;
 import graphic.Painter;
@@ -24,6 +26,7 @@ import graphic.hud.PauseMenu;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import level.IOnLevelLoader;
 import level.LevelAPI;
@@ -75,7 +78,10 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     public static ILevel currentLevel;
     private static PauseMenu<Actor> pauseMenu;
     private static Entity hero;
+    private static Monster monster;
     private Logger gameLogger;
+
+    private PatrouilleWalk p;
 
     private Save save;
 
@@ -146,6 +152,19 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         currentLevel = levelAPI.getCurrentLevel();
         entities.clear();
         getHero().ifPresent(this::placeOnLevelStart);
+        LevelAPI.addlevelnummer();
+        spawnMonster();
+    }
+
+    public void spawnMonster(){
+        for(int i = 0; i < Math.random()*3+LevelAPI.getlevelnummer()/2; i++){
+            int m = (int) (Math.random()*3+1);
+            switch (m) {
+                case (1) -> new Wolf();
+                case (2) -> new Mumie();
+                case (3) -> new Zombie();
+            }
+        }
         save.speichern(currentLevel);
     }
 

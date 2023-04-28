@@ -5,7 +5,11 @@ import ecs.components.*;
 import ecs.components.AnimationComponent;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
+import ecs.components.ai.fight.CollideAI;
+import ecs.components.ai.idle.RadiusWalk;
 import ecs.components.skill.*;
+import ecs.damage.DamageType;
+import ecs.systems.CollisionSystem;
 import graphic.Animation;
 
 /**
@@ -14,7 +18,7 @@ import graphic.Animation;
  */
 public class Hero extends Entity {
 
-    private final int fireballCoolDown = 5;
+    private final int fireballCoolDown = 1;
     private final float xSpeed = 0.3f;
     private final float ySpeed = 0.3f;
 
@@ -22,6 +26,7 @@ public class Hero extends Entity {
     private final String pathToIdleRight = "knight/idleRight";
     private final String pathToRunLeft = "knight/runLeft";
     private final String pathToRunRight = "knight/runRight";
+    private final String pathToHit = "knight/knight_m_hit_anim_f0";
     private Skill firstSkill;
 
     /** Entity with Components */
@@ -30,10 +35,11 @@ public class Hero extends Entity {
         new PositionComponent(this);
         setupVelocityComponent();
         setupAnimationComponent();
-        setupHitboxComponent();
         PlayableComponent pc = new PlayableComponent(this);
         setupFireballSkill();
         pc.setSkillSlot1(firstSkill);
+        new HealthComponent(this);
+        new CollisionSystem();
     }
 
     private void setupVelocityComponent() {
@@ -52,12 +58,5 @@ public class Hero extends Entity {
         firstSkill =
                 new Skill(
                         new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
-    }
-
-    private void setupHitboxComponent() {
-        new HitboxComponent(
-                this,
-                (you, other, direction) -> System.out.println("heroCollisionEnter"),
-                (you, other, direction) -> System.out.println("heroCollisionLeave"));
     }
 }

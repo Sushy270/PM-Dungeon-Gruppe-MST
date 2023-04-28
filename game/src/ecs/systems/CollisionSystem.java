@@ -39,7 +39,7 @@ public class CollisionSystem extends ECS_System {
                 .forEach(this::onEnterLeaveCheck);
     }
 
-    private CollisionData buildData(HitboxComponent a, HitboxComponent b) {
+    public CollisionData buildData(HitboxComponent a, HitboxComponent b) {
         return new CollisionData(a, b);
     }
 
