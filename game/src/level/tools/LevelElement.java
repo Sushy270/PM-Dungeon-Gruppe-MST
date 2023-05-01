@@ -9,7 +9,7 @@ import java.io.Serializable;
  *
  * @author Andre Matutat
  */
-public enum LevelElement{
+public enum LevelElement implements Serializable{
     /** This field is a blank */
     SKIP(Constants.LEVELELEMENT_IS_NOT_ACCESSIBLE),
     /** This field is a floor-field */

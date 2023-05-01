@@ -132,6 +132,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         save = new Save();
         try {
             save.laden(levelAPI);
+            this.onLevelLoad();
         } catch (FileNotFoundException e) {
             levelAPI.loadLevel(LEVELSIZE);
         }
@@ -154,6 +155,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         getHero().ifPresent(this::placeOnLevelStart);
         LevelAPI.addlevelnummer();
         spawnMonster();
+        save.speichern(currentLevel);
     }
 
     public void spawnMonster(){
@@ -165,7 +167,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
                 case (3) -> new Zombie();
             }
         }
-        save.speichern(currentLevel);
     }
 
     private void manageEntitiesSets() {
