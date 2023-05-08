@@ -156,6 +156,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         spawnMonster();
     }
 
+    /** Spawns a random number of monsters and types*/
     public void spawnMonster(){
         for(int i = 0; i < Math.random()*3+LevelAPI.getlevelnummer()/2; i++){
             int m = (int) (Math.random()*3+1);

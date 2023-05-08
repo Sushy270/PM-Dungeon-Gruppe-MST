@@ -13,8 +13,8 @@ public class RadiusWalk implements IIdleAI {
     private int currentBreak = 0;
 
     /**
-     * Finds a point in the radius and then moves there. When the point has been reached, a new
-     * point in the radius is searched for from there.
+     * Finds a point in the radius and then moves there. When the point has been reached, the entity
+     * returns to the point and finds a new point in the radius.
      *
      * @param radius Radius in which a target point is to be searched for
      * @param breakTimeInSeconds how long to wait (in seconds) before searching a new goal
