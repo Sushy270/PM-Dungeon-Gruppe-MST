@@ -4,6 +4,7 @@ import ecs.entities.Entity;
 
 public interface ISkillFunction {
 
+
     /**
      * Implements the concrete skill of an entity
      *

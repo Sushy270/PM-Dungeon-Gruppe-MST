@@ -7,9 +7,15 @@ public class XPComponent extends Component {
 
     private static final double LEVEL_1_XP = 100;
     private static final double FORMULA_SLOPE = 0.5;
-    private long currentLevel;
+    private long currentLevel = 0;
+    // currentCP ist being reset after levelUp
     private long currentXP;
+
+    // gibt die XP an die ein entity dropt wenn es stirbt.
+    // -1 als startwert, äquivalent zu null.
     private long lootXP = -1;
+
+    // ¯\_('_')_/¯
     private ILevelUp callbackLevelUp;
 
     /**

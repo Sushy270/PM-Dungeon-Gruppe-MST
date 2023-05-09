@@ -14,7 +14,7 @@ import graphic.Animation;
 
 /**
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
- * all its components and attributes .
+ * all its components and attributes.
  */
 public class Hero extends Entity {
 
@@ -38,6 +38,7 @@ public class Hero extends Entity {
         PlayableComponent pc = new PlayableComponent(this);
         setupFireballSkill();
         pc.setSkillSlot1(firstSkill);
+        setupSkillComponent();
         new HealthComponent(this);
         new CollisionSystem();
     }
@@ -58,5 +59,11 @@ public class Hero extends Entity {
         firstSkill =
                 new Skill(
                         new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
+    }
+
+    private void setupSkillComponent() {
+        new SkillComponent(this)
+            .addSkill(firstSkill);
+
     }
 }
