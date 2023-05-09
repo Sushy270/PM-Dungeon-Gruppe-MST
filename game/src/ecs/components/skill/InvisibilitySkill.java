@@ -15,8 +15,8 @@ import java.util.List;
 
 public class InvisibilitySkill implements ISkillFunction {
     private Entity entity;
-    private boolean aktve;
-
+    // ist needed to switch Skill on and off
+    private boolean isAktive;
     public InvisibilitySkill(Entity entity){
         this.entity = entity;
     }
@@ -38,7 +38,7 @@ public class InvisibilitySkill implements ISkillFunction {
         list.add(ac.getIdleRight().getAnimationFrames());
         list.add(vc.getMoveLeftAnimation().getAnimationFrames());
         list.add(vc.getMoveRightAnimation().getAnimationFrames());
-        this.createTransparents(list);
+//        this.createTransparents(list);
     }
 
     private void createTransparents(List<List<String>> paths)
@@ -49,7 +49,5 @@ public class InvisibilitySkill implements ISkillFunction {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }

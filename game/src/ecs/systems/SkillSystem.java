@@ -11,6 +11,9 @@ public class SkillSystem extends ECS_System {
         Game.getEntities().stream()
                 // Consider only entities that have a SkillComponent
                 .flatMap(e -> e.getComponent(SkillComponent.class).stream())
-                .forEach(sc -> ((SkillComponent) sc).reduceAllCoolDowns());
+                .forEach(sc -> {
+                    ((SkillComponent) sc).reduceAllCoolDowns();
+                    ((SkillComponent) sc).reduceAllDurations();
+                });
     }
 }

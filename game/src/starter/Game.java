@@ -311,6 +311,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         // https://stackoverflow.com/questions/52011592/libgdx-set-ortho-camera
     }
 
+    // creates Systems, but also decides in which order they are updated
     private void createSystems() {
         new VelocitySystem();
         new DrawSystem(painter);

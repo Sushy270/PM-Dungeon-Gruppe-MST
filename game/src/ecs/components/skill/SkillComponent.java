@@ -48,4 +48,9 @@ public class SkillComponent extends Component {
     public void reduceAllCoolDowns() {
         for (Skill skill : skillSet) skill.reduceCoolDown();
     }
+
+    /** reduces the currentDuration down of each skill by 1 frame */
+    public void reduceAllDurations() {
+        for (Skill skill : skillSet) skill.reduceDuration();
+    }
 }
