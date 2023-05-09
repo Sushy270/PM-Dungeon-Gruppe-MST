@@ -147,7 +147,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) togglePause();
     }
 
-    boolean levelL- oadedThisFrame = false;
+    boolean levelLoadedThisFrame = false;
     @Override
     public void onLevelLoad() {
         currentLevel = levelAPI.getCurrentLevel();

@@ -56,15 +56,6 @@ public class PlayerSystem extends ECS_System {
     }
 
     private void checkKeystroke(KSData ksd) {
-//        if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_UP.get()))
-//            ksd.vc.setCurrentYVelocity(1 * ksd.vc.getYVelocity());
-//        else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_DOWN.get()))
-//            ksd.vc.setCurrentYVelocity(-1 * ksd.vc.getYVelocity());
-//        else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_RIGHT.get()))
-//            ksd.vc.setCurrentXVelocity(1 * ksd.vc.getXVelocity());
-//        else if (Gdx.input.isKeyPressed(KeyboardConfig.MOVEMENT_LEFT.get()))
-//            ksd.vc.setCurrentXVelocity(-1 * ksd.vc.getXVelocity());
-
         // KeyStrokeRanking updaten
         updateKeyStrokeRanking(KeyboardConfig.MOVEMENT_UP.get());
         updateKeyStrokeRanking(KeyboardConfig.MOVEMENT_DOWN.get());
@@ -82,6 +73,7 @@ public class PlayerSystem extends ECS_System {
             ksd.pc.getSkillSlot1().ifPresent(skill -> skill.execute(ksd.e));
         else if (Gdx.input.isKeyPressed(KeyboardConfig.SECOND_SKILL.get()))
             ksd.pc.getSkillSlot2().ifPresent(skill -> skill.execute(ksd.e));
+
     }
 
     private KSData buildDataObject(PlayableComponent pc) {

@@ -7,7 +7,7 @@ import java.util.List;
 /** A list of textures from an animation. */
 public class Animation {
 
-    /** The set of textures that build the animation. */
+    /** The set of textures(path) that build the animation. */
     protected final List<String> animationFrames;
 
     /** The count of textures for the animation. */
@@ -37,6 +37,7 @@ public class Animation {
         this.animationFrames = new ArrayList<>(animationFrames);
         frames = animationFrames.size();
         this.frameTime = frameTime;
+        System.out.println(frames);
         this.looping = looping;
     }
 

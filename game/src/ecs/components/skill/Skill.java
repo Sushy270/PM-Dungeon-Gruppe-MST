@@ -24,6 +24,8 @@ public class Skill {
      * @param entity entity which uses the skill
      */
     public void execute(Entity entity) {
+        System.out.println((coolDownInFrames));
+        System.out.println((currentCoolDownInFrames + "\n"));
         if (!isOnCoolDown()) {
             skillFunction.execute(entity);
             activateCoolDown();

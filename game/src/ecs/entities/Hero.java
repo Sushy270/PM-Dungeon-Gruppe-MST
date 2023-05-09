@@ -19,6 +19,7 @@ import graphic.Animation;
 public class Hero extends Entity {
 
     private final int fireballCoolDown = 1;
+    private final int invisibilityCoolDown = 20;
     private final float xSpeed = 0.3f;
     private final float ySpeed = 0.3f;
 
@@ -28,6 +29,8 @@ public class Hero extends Entity {
     private final String pathToRunRight = "knight/runRight";
     private final String pathToHit = "knight/knight_m_hit_anim_f0";
     private Skill firstSkill;
+    private Skill secondSkill;
+    private Skill thirdSkill;
 
     /** Entity with Components */
     public Hero() {
@@ -36,8 +39,12 @@ public class Hero extends Entity {
         setupVelocityComponent();
         setupAnimationComponent();
         PlayableComponent pc = new PlayableComponent(this);
+
         setupFireballSkill();
         pc.setSkillSlot1(firstSkill);
+        setUpInvisibilitySkill();
+        pc.setSkillSlot2(secondSkill);
+
         setupSkillComponent();
         new HealthComponent(this);
         new CollisionSystem();
@@ -61,9 +68,18 @@ public class Hero extends Entity {
                         new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
     }
 
+    private void setUpInvisibilitySkill() {
+        secondSkill =
+            new Skill(
+                new InvisibilitySkill(this), invisibilityCoolDown);
+    }
+
     private void setupSkillComponent() {
-        new SkillComponent(this)
-            .addSkill(firstSkill);
+        SkillComponent sc = new SkillComponent(this);
+            sc.addSkill(firstSkill);
+            sc.addSkill(secondSkill);
+//            sc.addSkill(thirdSkill);
+
 
     }
 }
