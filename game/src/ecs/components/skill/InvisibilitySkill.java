@@ -39,6 +39,7 @@ public class InvisibilitySkill implements ISkillFunction {
         list.add(vc.getMoveLeftAnimation().getAnimationFrames());
         list.add(vc.getMoveRightAnimation().getAnimationFrames());
 //        this.createTransparents(list);
+        System.out.println("Toggle Invisibility");
     }
 
     private void createTransparents(List<List<String>> paths)

@@ -14,6 +14,10 @@ public class Skill {
     private int manaFramecounter;
     private final ManaComponent mc;
 
+    // entity only exists as Parameter in execute function.(Why?, dont know)
+    // saving it here to use it outside od the method
+    private Entity temp;
+
     /**
      * @param skillFunction Function of this skill
      * @param coolDownInSeconds
@@ -62,6 +66,7 @@ public class Skill {
      * @param entity entity which uses the skill
      */
     public void execute(Entity entity) {
+        temp = entity;
         if(mc == null) {
             if (!isOnCoolDown()) {
                 if (!isAktive())
@@ -71,6 +76,7 @@ public class Skill {
                     currentDurationInFrames = 0;
                     activateCoolDown();
                 }
+                else{return;}
                 skillFunction.execute(entity);
             }
         }
@@ -83,6 +89,8 @@ public class Skill {
                 else if (manaFramecounter > Constants.FRAME_RATE) {
                     manaFramecounter = 0;
                 }
+                else{return;}
+                mc.toggleGenerateManaPoints();
                 skillFunction.execute(entity);
             }
         }
@@ -104,6 +112,11 @@ public class Skill {
     public void reduceCoolDown() {
         // currentCollDownInFrames stops at 0. Doesn't reach -1.
         currentCoolDownInFrames = Math.max(0, --currentCoolDownInFrames);
+//        if(skillFunction.getClass() == InvisibilitySkill.class)
+//        {
+//            System.out.println("Duration: " + currentDurationInFrames);
+//            System.out.println("Cooldown: " + currentCoolDownInFrames + "\n");
+//        }
     }
     /**
      * @return true if duration or manaFrameCounter is not 0, else false
@@ -118,7 +131,11 @@ public class Skill {
     /** reduces the current duration down by frame */
     public void reduceDuration() {
         currentDurationInFrames = Math.max(0, --currentDurationInFrames);
-        if(currentDurationInFrames == 1){activateCoolDown();}
+        if(currentDurationInFrames == 1) {
+            activateCoolDown();
+            skillFunction.execute(temp);
+            temp = null;
+        }
     }
 
     /** activate Frame Counter by setting to 1 */
@@ -134,8 +151,16 @@ public class Skill {
 
     /** reduces ManaPoints of Component specific time given by framesPerManaPoint */
     public void depleteManaPoints() {
-        if(isAktive() && mc != null && manaFramecounter % framesPerManaPoint == 0)
+        if(isAktive() && mc != null && manaFramecounter % framesPerManaPoint == 0) {
             mc.reduceManaPoints(1);
+            System.out.println("Manapoints: " + mc.getCurrentPoints());
+            if(mc.getCurrentPoints() < 1) {
+                mc.toggleGenerateManaPoints();
+                manaFramecounter = 0;
+                skillFunction.execute(temp);
+                temp = null;
+            }
+        }
         increaseManaFrameCounter();
     }
 }
