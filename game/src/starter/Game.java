@@ -16,6 +16,7 @@ import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
 import ecs.components.ai.idle.PatrouilleWalk;
 import ecs.components.ai.idle.RadiusWalk;
+import ecs.components.xp.XPComponent;
 import ecs.entities.*;
 
 import ecs.systems.*;
@@ -155,7 +156,17 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         getHero().ifPresent(this::placeOnLevelStart);
         LevelAPI.addlevelnummer();
         spawnMonster();
+        getHero().ifPresent(this::increaseHeroXP);
         save.speichern(currentLevel);
+    }
+
+    private void increaseHeroXP(Entity hero) {
+        XPComponent xcp =
+            (XPComponent)
+                ((Hero)hero).getComponent(XPComponent.class)
+                    .orElseThrow(
+                        () -> new MissingComponentException("XPComponent"));
+        xcp.addXP(40);
     }
 
     public void spawnMonster(){
@@ -323,5 +334,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         new SkillSystem();
         new ProjectileSystem();
         new ManaSystem();
+        new XPSystem();
     }
 }

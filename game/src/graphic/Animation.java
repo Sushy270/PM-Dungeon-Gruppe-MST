@@ -37,7 +37,6 @@ public class Animation {
         this.animationFrames = new ArrayList<>(animationFrames);
         frames = animationFrames.size();
         this.frameTime = frameTime;
-        System.out.println(frames);
         this.looping = looping;
     }
 

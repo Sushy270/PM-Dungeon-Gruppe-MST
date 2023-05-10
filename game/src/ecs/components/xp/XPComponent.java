@@ -2,6 +2,7 @@ package ecs.components.xp;
 
 import ecs.components.Component;
 import ecs.entities.Entity;
+import ecs.entities.Hero;
 
 public class XPComponent extends Component {
 
@@ -15,7 +16,7 @@ public class XPComponent extends Component {
     // -1 als startwert, äquivalent zu null.
     private long lootXP = -1;
 
-    // ¯\_('_')_/¯
+    // Ibjekt, welches eine Methode beinhlated die die levelUo Aktion ausführen soll
     private ILevelUp callbackLevelUp;
 
     /**
@@ -95,8 +96,15 @@ public class XPComponent extends Component {
      *
      * @param level new level
      */
+    @Deprecated
     public void levelUp(long level) {
         if (this.callbackLevelUp != null) this.callbackLevelUp.onLevelUp(level);
+    }
+
+    public void levelUp() {
+        System.out.println("Level: " + currentLevel);
+        Hero hero = (Hero) entity;
+        hero.levelUp();
     }
 
     /**

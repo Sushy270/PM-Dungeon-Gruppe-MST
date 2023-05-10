@@ -15,6 +15,16 @@ public class XPSystem extends ECS_System {
                             long xpLeft;
                             while ((xpLeft = comp.getXPToNextLevel()) <= 0) {
                                 this.performLevelUp(comp, (int) xpLeft);
+                                this.performLevelUp(comp, (int) xpLeft);
+                                this.performLevelUp(comp, (int) xpLeft);
+                                this.performLevelUp(comp, (int) xpLeft);
+                                this.performLevelUp(comp, (int) xpLeft);
+                                this.performLevelUp(comp, (int) xpLeft);
+                                this.performLevelUp(comp, (int) xpLeft);
+                                this.performLevelUp(comp, (int) xpLeft);
+                                this.performLevelUp(comp, (int) xpLeft);
+                                this.performLevelUp(comp, (int) xpLeft);
+                                this.performLevelUp(comp, (int) xpLeft);
                             }
                         });
     }
@@ -30,6 +40,6 @@ public class XPSystem extends ECS_System {
     private void performLevelUp(XPComponent comp, int xpLeft) {
         comp.setCurrentLevel(comp.getCurrentLevel() + 1);
         comp.setCurrentXP(xpLeft * -1);
-        comp.levelUp(comp.getCurrentLevel());
+        comp.levelUp();
     }
 }

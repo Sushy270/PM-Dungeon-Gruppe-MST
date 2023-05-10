@@ -3,14 +3,16 @@ package ecs.components.skill;
 import ecs.entities.Entity;
 import tools.Constants;
 
+import java.awt.*;
+
 public class Skill {
 
     private final ISkillFunction skillFunction;
-    private final int coolDownInFrames;
+    private int coolDownInFrames;
     private int currentCoolDownInFrames;
-    private final int durationInFrames;
+    private int durationInFrames;
     private int currentDurationInFrames;
-    private final int framesPerManaPoint;
+    private int framesPerManaPoint;
     private int manaFramecounter;
     private final ManaComponent mc;
 
@@ -159,8 +161,34 @@ public class Skill {
                 manaFramecounter = 0;
                 skillFunction.execute(temp);
                 temp = null;
+                return;
             }
         }
         increaseManaFrameCounter();
+    }
+
+    public void increaseRandomValue() {
+        System.out.println(mc == null);
+        if(mc == null) {
+            int i = (int) (Math.random() * 2);
+            i = 0;
+            switch (i) {
+                case (0):
+                    if(durationInFrames != 1) {
+                        durationInFrames *= 1.2;
+                        System.out.println(skillFunction.getClass().getSimpleName() + " - Increased Duration: " + ((int) ((double) durationInFrames / Constants.FRAME_RATE * 100)) / 100.0);
+                        break;
+                    }
+
+                case (1):
+                    coolDownInFrames *= 0.8;
+                    System.out.println(skillFunction.getClass().getSimpleName() + " - Decreased Cooldown: " + ((int) ((double) coolDownInFrames / Constants.FRAME_RATE * 100)) / 100.0 + "\n");
+                    break;
+            }
+        }
+        else {
+            framesPerManaPoint *= 1.2;
+            System.out.println(skillFunction.getClass().getSimpleName() + " - Decreased Mana Consumption: point/" + ((int)((double)framesPerManaPoint/Constants.FRAME_RATE*100))/100.0 + "s");
+        }
     }
 }

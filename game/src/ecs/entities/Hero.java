@@ -6,6 +6,7 @@ import ecs.components.AnimationComponent;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.components.skill.*;
+import ecs.components.xp.XPComponent;
 import ecs.systems.CollisionSystem;
 import graphic.Animation;
 import tools.Constants;
@@ -16,7 +17,7 @@ import tools.Constants;
  */
 public class Hero extends Entity {
 
-    private final int fireballCoolDown = 1;
+    private final int fireballCoolDown = 2;
     private final int invisibilityCoolDown = 20;
     private final int invisibilityDuration = 10;
     private final double speedSkillIncrease = 1.5;
@@ -45,6 +46,7 @@ public class Hero extends Entity {
         new HealthComponent(this);
         new CollisionSystem();
         new ManaComponent(this, 15, 0, Constants.FRAME_RATE * 4);
+        new XPComponent(this);
 
         setupFireballSkill();
         setupInvisibilitySkill();
@@ -101,5 +103,23 @@ public class Hero extends Entity {
         pc.setSkillSlot1(firstSkill);
         pc.setSkillSlot2(secondSkill);
         pc.setSkillSlot3(thirdSkill);
+    }
+
+    public void levelUp() {
+        System.out.println("levelUP!!!");
+        int i = (int) (Math.random() * 3);
+        i = 0;
+        switch (i) {
+            case 0:
+                firstSkill.increaseRandomValue();
+                break;
+            case 1:
+                secondSkill.increaseRandomValue();
+                break;
+            case 2:
+                thirdSkill.increaseRandomValue();
+                break;
+        }
+
     }
 }
