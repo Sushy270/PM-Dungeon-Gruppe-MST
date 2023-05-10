@@ -84,6 +84,7 @@ public class Skill {
         }
         else {
             if(mc.getCurrentPoints() > 0) {
+                System.out.println(manaFramecounter);
                 if(!isAktive()) {
                     aktivateManaFrameCounter();
                 }
@@ -168,10 +169,8 @@ public class Skill {
     }
 
     public void increaseRandomValue() {
-        System.out.println(mc == null);
         if(mc == null) {
             int i = (int) (Math.random() * 2);
-            i = 0;
             switch (i) {
                 case (0):
                     if(durationInFrames != 1) {
@@ -182,7 +181,7 @@ public class Skill {
 
                 case (1):
                     coolDownInFrames *= 0.8;
-                    System.out.println(skillFunction.getClass().getSimpleName() + " - Decreased Cooldown: " + ((int) ((double) coolDownInFrames / Constants.FRAME_RATE * 100)) / 100.0 + "\n");
+                    System.out.println(skillFunction.getClass().getSimpleName() + " - Decreased Cooldown: " + ((int) ((double) coolDownInFrames / Constants.FRAME_RATE * 100)) / 100.0);
                     break;
             }
         }

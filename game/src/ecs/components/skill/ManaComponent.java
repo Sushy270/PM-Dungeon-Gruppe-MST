@@ -29,7 +29,7 @@ public class ManaComponent extends Component{
 
     public void generatePoints() {
         currentFramesTilManapoint--;
-        if(currentFramesTilManapoint == 0 && generateManaPoints){
+        if(currentFramesTilManapoint <= 0 && generateManaPoints){
             increaseManapoints(1);
             currentFramesTilManapoint = framesTilManapoint;
             System.out.println("ManaPoints: " + currentPoints);

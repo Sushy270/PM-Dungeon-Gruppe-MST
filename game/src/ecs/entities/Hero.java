@@ -45,7 +45,7 @@ public class Hero extends Entity {
         setupAnimationComponent();
         new HealthComponent(this);
         new CollisionSystem();
-        new ManaComponent(this, 15, 0, Constants.FRAME_RATE * 4);
+        new ManaComponent(this, 15, 0, Constants.FRAME_RATE);
         new XPComponent(this);
 
         setupFireballSkill();
@@ -108,7 +108,6 @@ public class Hero extends Entity {
     public void levelUp() {
         System.out.println("levelUP!!!");
         int i = (int) (Math.random() * 3);
-        i = 0;
         switch (i) {
             case 0:
                 firstSkill.increaseRandomValue();
