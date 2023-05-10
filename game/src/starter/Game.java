@@ -15,7 +15,6 @@ import controller.SystemController;
 import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
 import ecs.components.ai.idle.PatrouilleWalk;
-import ecs.components.ai.idle.RadiusWalk;
 import ecs.entities.*;
 
 import ecs.systems.*;
@@ -26,7 +25,6 @@ import graphic.hud.PauseMenu;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import level.IOnLevelLoader;
 import level.LevelAPI;
@@ -83,7 +81,15 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
     private PatrouilleWalk p;
 
+    private static List<Entity> listeWolf = new ArrayList<>();
+    private static List<Entity> listeZombie = new ArrayList<>();
+    private static List<Entity> listeMumie = new ArrayList<>();
+
+    public static Tombstone t;
+    public static NpcGhost npc;
     private Save save;
+    private static int selectOneMonster;
+    private static int despawnOrSpawn;
 
     public static void main(String[] args) {
         // start the game
@@ -144,6 +150,14 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         manageEntitiesSets();
         getHero().ifPresent(this::loadNextLevelIfEntityIsOnEndTile);
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) togglePause();
+        if(t != null){
+            if(despawnOrSpawn == 1) {
+                t.despawnOneKindOfMonster();
+            }
+            else{
+                t.spawnNewMonster();
+            }
+        }
     }
 
     boolean toggle = false;
@@ -153,20 +167,76 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         entities.clear();
         getHero().ifPresent(this::placeOnLevelStart);
         LevelAPI.addlevelnummer();
+
+        selectOneMonster = (int) (Math.random()*3+1);
+        despawnOrSpawn = (int) (Math.random()*2+1);
         spawnMonster();
+        spawnTombstone();
+    }
+
+    public void spawnTombstone(){
+        int x = (int) (Math.random()*3+1);
+        if(x == 1){
+            npc = new NpcGhost();
+            t = new Tombstone(npc);
+        }
+        else{
+            t = null;
+        }
     }
 
     /** Spawns a random number of monsters and types*/
     public void spawnMonster(){
         for(int i = 0; i < Math.random()*3+LevelAPI.getlevelnummer()/2; i++){
-            int m = (int) (Math.random()*3+1);
-            switch (m) {
-                case (1) -> new Wolf();
-                case (2) -> new Mumie();
-                case (3) -> new Zombie();
+            int x = (int) (Math.random()*3+1);
+            switch (x) {
+                case (1) :
+                    Wolf w = new Wolf();
+                    listeWolf.add(w);
+                    break;
+                case (2) :
+                    Zombie z = new Zombie();
+                    listeZombie.add(z);
+                    break;
+                case (3) :
+                    Mumie m = new Mumie();
+                    listeMumie.add(m);
+                    break;
             }
         }
         save.speichern(currentLevel);
+    }
+
+    /**This methode is used to despawn a random kind of monsters*/
+    public static void despawnMonster(){
+    switch (selectOneMonster) {
+            case (1) :
+                for (Entity entity : listeWolf) {
+                    Game.removeEntity(entity);
+                }
+                listeWolf.clear();
+                break;
+            case (2) :
+                for (Entity entity : listeZombie) {
+                    Game.removeEntity(entity);
+                }
+                listeZombie.clear();
+                break;
+            case (3) :
+                for (Entity entity : listeMumie) {
+                    Game.removeEntity(entity);
+                }
+                listeMumie.clear();
+                break;
+        }
+    }
+
+    public static void spawnOneZombie(){
+        if(despawnOrSpawn == 2) {
+            Zombie z = new Zombie();
+            listeZombie.add(z);
+            despawnOrSpawn = 3;
+        }
     }
 
     private void manageEntitiesSets() {
