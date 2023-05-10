@@ -3,13 +3,16 @@ package ecs.components.skill;
 import ecs.entities.Entity;
 import tools.Constants;
 
+import java.util.Optional;
+
 public class Skill {
 
-    private ISkillFunction skillFunction;
-    private int coolDownInFrames;
+    private final ISkillFunction skillFunction;
+    private final int coolDownInFrames;
     private int currentCoolDownInFrames;
-    private int durationInFrames;
+    private final int durationInFrames;
     private int currentDurationInFrames;
+    private int simpleFramecounter;
 
     /**
      * @param skillFunction Function of this skill
@@ -19,7 +22,7 @@ public class Skill {
         this.skillFunction = skillFunction;
         this.coolDownInFrames = coolDownInSeconds * Constants.FRAME_RATE;
         this.currentCoolDownInFrames = 0;
-        this.durationInFrames = 0;
+        this.durationInFrames = 1;
         this.currentDurationInFrames = 0;
     }
 
@@ -29,7 +32,9 @@ public class Skill {
      * @param durationInFrames duration of the Skill in seconds
      */
     public Skill(ISkillFunction skillFunction, int coolDownInSeconds, int durationInFrames) {
-        this(skillFunction, coolDownInSeconds);
+        this.skillFunction = skillFunction;
+        this.coolDownInFrames = coolDownInSeconds * Constants.FRAME_RATE;
+        this.currentCoolDownInFrames = 0;
         this.durationInFrames = durationInFrames * Constants.FRAME_RATE;
         this.currentDurationInFrames = 0;
     }
@@ -40,15 +45,21 @@ public class Skill {
      * @param entity entity which uses the skill
      */
     public void execute(Entity entity) {
-        if (!isOnCoolDown()) {
-            if(!isAktive())
-                activateDuration();
-            // Fähigkeit soll nicht direkt nach weniger als einer sekunde deaktiviert werden sollen
-            else if(durationInFrames - currentDurationInFrames > Constants.FRAME_RATE) {
-                currentDurationInFrames = 0;
-                activateCoolDown();
+        if(mc == null) {
+            if (!isOnCoolDown()) {
+                if (!isAktive())
+                    activateDuration();
+                    // Fähigkeit soll nicht direkt nach weniger als einer sekunde deaktiviert werden sollen
+                else if (durationInFrames - currentDurationInFrames > Constants.FRAME_RATE) {
+                    currentDurationInFrames = 0;
+                    activateCoolDown();
+                }
+                skillFunction.execute(entity);
             }
-            skillFunction.execute(entity);
+        }
+        else {
+            simpleFramecounter = 0;
+            if(simpleFramecounter%skillFunction == 0)
         }
     }
 
@@ -79,4 +90,6 @@ public class Skill {
         currentDurationInFrames = Math.max(0, --currentDurationInFrames);
         if(currentDurationInFrames == 1){activateCoolDown();}
     }
+
+    public void increaseFrameCounter() {simpleFramecounter++;}
 }

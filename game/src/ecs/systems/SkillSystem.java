@@ -14,6 +14,7 @@ public class SkillSystem extends ECS_System {
                 .forEach(sc -> {
                     ((SkillComponent) sc).reduceAllCoolDowns();
                     ((SkillComponent) sc).reduceAllDurations();
+                    ((SkillComponent) sc).increaseFrameCounter();
                 });
     }
 }

@@ -5,12 +5,10 @@ import ecs.components.*;
 import ecs.components.AnimationComponent;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
-import ecs.components.ai.fight.CollideAI;
-import ecs.components.ai.idle.RadiusWalk;
 import ecs.components.skill.*;
-import ecs.damage.DamageType;
 import ecs.systems.CollisionSystem;
 import graphic.Animation;
+import tools.Constants;
 
 /**
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
@@ -45,6 +43,7 @@ public class Hero extends Entity {
         setupAnimationComponent();
         new HealthComponent(this);
         new CollisionSystem();
+        new ManaComponent(this, 15, 0, Constants.FRAME_RATE * 4);
 
         setupFireballSkill();
         setupInvisibilitySkill();

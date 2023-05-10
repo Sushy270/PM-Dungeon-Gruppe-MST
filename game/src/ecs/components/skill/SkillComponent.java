@@ -53,4 +53,6 @@ public class SkillComponent extends Component {
     public void reduceAllDurations() {
         for (Skill skill : skillSet) skill.reduceDuration();
     }
+
+    public void increaseFrameCounter() {for (Skill skill : skillSet) skill.increaseFrameCounter();}
 }
