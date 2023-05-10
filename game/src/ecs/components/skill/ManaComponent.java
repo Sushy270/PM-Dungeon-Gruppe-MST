@@ -33,4 +33,8 @@ public class ManaComponent extends Component{
             System.out.println("ManaPoints: " + currentPoints);
         }
     }
+
+    public int getCurrentPoints() {
+        return currentPoints;
+    }
 }

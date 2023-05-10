@@ -20,6 +20,7 @@ public class Hero extends Entity {
     private final int invisibilityCoolDown = 20;
     private final int invisibilityDuration = 10;
     private final double speedSkillIncrease = 1.5;
+    private final int speedSkillManaPointsDepletion = 1;
     private final float xSpeed = 0.3f;
     private final float ySpeed = 0.3f;
 
@@ -79,9 +80,13 @@ public class Hero extends Entity {
     }
 
     private void setupSpeedSkill() {
+        ManaComponent mc = (ManaComponent) getComponent(ManaComponent.class)
+            .orElseThrow(
+                () -> new MissingComponentException("ManaComponent"));
+
         thirdSkill =
             new Skill(
-                new SpeedSkill(this, speedSkillIncrease), 20, 10);
+                new SpeedSkill(this, speedSkillIncrease), speedSkillManaPointsDepletion * Constants.FRAME_RATE, mc);
     }
 
     private void setupSkillComponent() {

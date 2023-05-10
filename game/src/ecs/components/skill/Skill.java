@@ -3,8 +3,6 @@ package ecs.components.skill;
 import ecs.entities.Entity;
 import tools.Constants;
 
-import java.util.Optional;
-
 public class Skill {
 
     private final ISkillFunction skillFunction;
@@ -12,7 +10,9 @@ public class Skill {
     private int currentCoolDownInFrames;
     private final int durationInFrames;
     private int currentDurationInFrames;
-    private int simpleFramecounter;
+    private final int framesPerManaPoint;
+    private int manaFramecounter;
+    private final ManaComponent mc;
 
     /**
      * @param skillFunction Function of this skill
@@ -24,6 +24,8 @@ public class Skill {
         this.currentCoolDownInFrames = 0;
         this.durationInFrames = 1;
         this.currentDurationInFrames = 0;
+        this.framesPerManaPoint = -1;
+        this.mc = null;
     }
 
     /**
@@ -37,6 +39,21 @@ public class Skill {
         this.currentCoolDownInFrames = 0;
         this.durationInFrames = durationInFrames * Constants.FRAME_RATE;
         this.currentDurationInFrames = 0;
+        this.framesPerManaPoint = -1;
+        this.mc = null;
+    }
+    /**
+     * @param skillFunction Function of this skill
+     * @param mc ManaComponent of the Entity
+     */
+    public Skill(ISkillFunction skillFunction, int framesPerManaComponent, ManaComponent mc) {
+        this.skillFunction = skillFunction;
+        this.coolDownInFrames = 0;
+        this.currentCoolDownInFrames = 0;
+        this.durationInFrames = 1;
+        this.currentDurationInFrames = 0;
+        this.framesPerManaPoint = framesPerManaComponent;
+        this.mc = mc;
     }
 
     /**
@@ -58,8 +75,16 @@ public class Skill {
             }
         }
         else {
-            simpleFramecounter = 0;
-            if(simpleFramecounter%skillFunction == 0)
+            if(mc.getCurrentPoints() > 0) {
+                if(!isAktive()) {
+                    aktivateManaFrameCounter();
+                }
+                // Fähigkeit soll nicht direkt nach weniger als einer sekunde deaktiviert werden sollen
+                else if (manaFramecounter > Constants.FRAME_RATE) {
+                    manaFramecounter = 0;
+                }
+                skillFunction.execute(entity);
+            }
         }
     }
 
@@ -80,16 +105,37 @@ public class Skill {
         // currentCollDownInFrames stops at 0. Doesn't reach -1.
         currentCoolDownInFrames = Math.max(0, --currentCoolDownInFrames);
     }
-    public boolean isAktive() {return currentDurationInFrames > 0;}
+    /**
+     * @return true if duration or manaFrameCounter is not 0, else false
+     */
+    public boolean isAktive() {return currentDurationInFrames > 0 || manaFramecounter > 0;}
+
+    /** activate duration */
     public void activateDuration() {
         currentDurationInFrames = durationInFrames;
     }
 
-    /** reduces the current cool down by frame */
+    /** reduces the current duration down by frame */
     public void reduceDuration() {
         currentDurationInFrames = Math.max(0, --currentDurationInFrames);
         if(currentDurationInFrames == 1){activateCoolDown();}
     }
 
-    public void increaseFrameCounter() {simpleFramecounter++;}
+    /** activate Frame Counter by setting to 1 */
+    public void aktivateManaFrameCounter() {manaFramecounter = 1;}
+
+    /** increases the manaFrameCounter by one frame */
+    private void increaseManaFrameCounter() {
+        // when manaFrameCounter ist 0 it doesn't raise
+        // setting manaFrameCounter to 1 "aktivates" this function
+        if(manaFramecounter > 0)
+            manaFramecounter++;
+    }
+
+    /** reduces ManaPoints of Component specific time given by framesPerManaPoint */
+    public void depleteManaPoints() {
+        if(isAktive() && mc != null && manaFramecounter % framesPerManaPoint == 0)
+            mc.reduceManaPoints(1);
+        increaseManaFrameCounter();
+    }
 }

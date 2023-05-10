@@ -54,5 +54,5 @@ public class SkillComponent extends Component {
         for (Skill skill : skillSet) skill.reduceDuration();
     }
 
-    public void increaseFrameCounter() {for (Skill skill : skillSet) skill.increaseFrameCounter();}
+    public void increaseFrameCounter() {for (Skill skill : skillSet) skill.depleteManaPoints();}
 }
