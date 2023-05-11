@@ -141,4 +141,18 @@ public class VelocityComponent extends Component {
     public Animation getMoveLeftAnimation() {
         return moveLeftAnimation;
     }
+
+    /**
+     * @param path Idleanimation faced left
+     */
+    public void setMoceLeftPath(List<String> path) {
+        moveLeftAnimation.setAnimationFrames(path);
+    }
+
+    /**
+     * @param path Idleanimation faced right
+     */
+    public void setMoveRightPath(List<String> path) {
+        moveRightAnimation.setAnimationFrames(path);
+    }
 }

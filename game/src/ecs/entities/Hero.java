@@ -119,6 +119,5 @@ public class Hero extends Entity {
                 thirdSkill.increaseRandomValue();
                 break;
         }
-
     }
 }

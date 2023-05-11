@@ -28,7 +28,7 @@ public class Skill {
         this.skillFunction = skillFunction;
         this.coolDownInFrames = coolDownInSeconds * Constants.FRAME_RATE;
         this.currentCoolDownInFrames = 0;
-        this.durationInFrames = 1;
+        this.durationInFrames = 2;
         this.currentDurationInFrames = 0;
         this.framesPerManaPoint = -1;
         this.mc = null;
@@ -56,7 +56,7 @@ public class Skill {
         this.skillFunction = skillFunction;
         this.coolDownInFrames = 0;
         this.currentCoolDownInFrames = 0;
-        this.durationInFrames = 1;
+        this.durationInFrames = 2;
         this.currentDurationInFrames = 0;
         this.framesPerManaPoint = framesPerManaComponent;
         this.mc = mc;
@@ -84,7 +84,6 @@ public class Skill {
         }
         else {
             if(mc.getCurrentPoints() > 0) {
-                System.out.println(manaFramecounter);
                 if(!isAktive()) {
                     aktivateManaFrameCounter();
                 }
@@ -115,11 +114,6 @@ public class Skill {
     public void reduceCoolDown() {
         // currentCollDownInFrames stops at 0. Doesn't reach -1.
         currentCoolDownInFrames = Math.max(0, --currentCoolDownInFrames);
-//        if(skillFunction.getClass() == InvisibilitySkill.class)
-//        {
-//            System.out.println("Duration: " + currentDurationInFrames);
-//            System.out.println("Cooldown: " + currentCoolDownInFrames + "\n");
-//        }
     }
     /**
      * @return true if duration or manaFrameCounter is not 0, else false

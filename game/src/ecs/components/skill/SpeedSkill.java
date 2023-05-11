@@ -1,9 +1,12 @@
 package ecs.components.skill;
 
+import ecs.components.MissingComponentException;
+import ecs.components.VelocityComponent;
 import ecs.entities.Entity;
 
 public class SpeedSkill implements ISkillFunction {
     private final double speedIncrease;
+    private double currentSpeedIncrease;
 
     // is needed to switch Skill on and off
     private boolean isAktive;
@@ -14,6 +17,22 @@ public class SpeedSkill implements ISkillFunction {
     }
 
     public void execute(Entity entity) {
-        System.out.println("toggle Speed");
+        isAktive = !isAktive;
+        VelocityComponent vc =
+            (VelocityComponent)
+                entity.getComponent(VelocityComponent.class)
+                    .orElseThrow(
+                        () -> new MissingComponentException("VeloccityComponent"));
+        if(isAktive) {
+            vc.setXVelocity((float) (vc.getXVelocity() * speedIncrease));
+            vc.setYVelocity((float) (vc.getYVelocity() * speedIncrease));
+            currentSpeedIncrease = speedIncrease;
+        }
+        else {
+            vc.setXVelocity((float) (vc.getXVelocity() / currentSpeedIncrease));
+            vc.setYVelocity((float) (vc.getYVelocity() / currentSpeedIncrease));
+            currentSpeedIncrease = 1;
+        }
+
     }
 }

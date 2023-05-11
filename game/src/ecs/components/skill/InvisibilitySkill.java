@@ -2,15 +2,16 @@ package ecs.components.skill;
 
 import ecs.components.AnimationComponent;
 import ecs.components.MissingComponentException;
-import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
+import ecs.components.ai.AIComponent;
+import ecs.components.ai.transition.RangeTransition;
 import ecs.entities.Entity;
+import starter.Game;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,32 +20,41 @@ public class InvisibilitySkill implements ISkillFunction {
     private Entity entity;
     // ist needed to switch Skill on and off
     private boolean isAktive;
+    private List<List<String>> transparentPaths;
+    private List<List<String>> normalPaths;
+    private AnimationComponent ac;
+    private VelocityComponent vc;
     public InvisibilitySkill(Entity entity){
+
         this.entity = entity;
+        isAktive = false;
+
+        ac = getAnimationComponent();
+        vc = getVelocityComponent();
+
+        normalPaths = new ArrayList<>();
+        normalPaths.add(ac.getIdleLeft().getAnimationFrames());
+        normalPaths.add(ac.getIdleRight().getAnimationFrames());
+        normalPaths.add(vc.getMoveLeftAnimation().getAnimationFrames());
+        normalPaths.add(vc.getMoveRightAnimation().getAnimationFrames());
+
+        transparentPaths = createTransparents(normalPaths);
     }
 
     public void execute(Entity entity) {
-        AnimationComponent ac =
-            (AnimationComponent)
-                entity.getComponent(AnimationComponent.class)
-                    .orElseThrow(
-                        () -> new MissingComponentException("PositionComponent"));
-        VelocityComponent vc =
-            (VelocityComponent)
-                entity.getComponent(VelocityComponent.class)
-                    .orElseThrow(
-                        () -> new MissingComponentException("VelocityComponent"));
+        isAktive = !isAktive;
 
-        List<List<String>> list = new ArrayList<>();
-        list.add(ac.getIdleLeft().getAnimationFrames());
-        list.add(ac.getIdleRight().getAnimationFrames());
-        list.add(vc.getMoveLeftAnimation().getAnimationFrames());
-        list.add(vc.getMoveRightAnimation().getAnimationFrames());
-        this.createTransparents(list);
-        System.out.println("Toggle Invisibility");
+        if(isAktive) {
+            setAnimations(transparentPaths);
+            changeRangeEntities(0);
+        }
+        else {
+            setAnimations(normalPaths);
+            changeRangeEntities(5);
+        }
     }
 
-    private void createTransparents(List<List<String>> paths)
+    private List<List<String>> createTransparents(List<List<String>> paths)
     {
         // creates the direcktories
         String firstPath = paths.get(0).get(0);
@@ -54,31 +64,34 @@ public class InvisibilitySkill implements ISkillFunction {
         if (!transparentDir.exists()) {
             if (transparentDir.mkdirs()) {
                 System.out.println("Transparents directory created: " + transparentDirectory);
-
-                for (List<String> pathList : paths) {
-                    String pathFirst = new File(pathList.get(0)).getParent();
-                    int lastSeparator = pathFirst.lastIndexOf("\\");
-                    String lastDirectory = pathFirst.substring(lastSeparator);
-                    String complete = transparentDirectory + lastDirectory;
-
-                    File path = new File(complete);
-                    if (!path.exists())
-                        path.mkdirs();
-                    for(String png : pathList) {
-                        createTransparentsPNG(png, complete);
-                    }
-                }
-            }
-            else {
-                System.err.println("Failed to create Transparents directory: " + transparentDirectory);
             }
         }
         else {
             System.out.println("Transparents directory already exists: " + transparentDirectory);
         }
+
+        List<List<String>> transparentsMain = new ArrayList<>();
+
+        for (List<String> pathList : paths) {
+            List<String> transparents = new ArrayList<>();
+            String pathFirst = new File(pathList.get(0)).getParent();
+            int lastSeparator = pathFirst.lastIndexOf("\\");
+            String lastDirectory = pathFirst.substring(lastSeparator);
+            String complete = transparentDirectory + lastDirectory;
+
+            File path = new File(complete);
+            if (!path.exists())
+                path.mkdirs();
+            for(String png : pathList) {
+                transparents.add(createTransparentsPNG(png, complete));
+            }
+            transparentsMain.add(transparents);
+        }
+        return transparentsMain;
     }
 
-    private void createTransparentsPNG(String pathPNG, String destination) {
+
+    private String createTransparentsPNG(String pathPNG, String destination) {
         try {
             // Lade das PNG-Bild
             BufferedImage image = ImageIO.read(new File(pathPNG));
@@ -100,8 +113,39 @@ public class InvisibilitySkill implements ISkillFunction {
             ImageIO.write(transparentImage, "PNG", new File(destinationPath));
 
             System.out.println("Transparentes PNG wurde erstellt: " + destinationPath);
+            return destinationPath;
         } catch (IOException e) {
-            System.err.println("Fehler beim Erstellen des transparenten PNG: " + e.getMessage());
+            System.err.println("Fehler beim Erstellen des transparenten PNG: " + e.getMessage());return null;
         }
+    }
+
+    private AnimationComponent getAnimationComponent() {
+        return (AnimationComponent)
+            entity.getComponent(AnimationComponent.class)
+                .orElseThrow(
+                    () -> new MissingComponentException("PositionComponent"));
+    }
+
+    private VelocityComponent getVelocityComponent() {
+        return (VelocityComponent)
+            entity.getComponent(VelocityComponent.class)
+                .orElseThrow(
+                    () -> new MissingComponentException("VelocityComponent"));
+    }
+
+    private void setAnimations(List<List<String>> paths) {
+        ac.setIdleLeftPath(paths.get(0));
+        ac.setIdleRightPath(paths.get(1));
+        vc.setMoceLeftPath(paths.get(2));
+        vc.setMoveRightPath(paths.get(3));
+    }
+
+    private void changeRangeEntities(int range) {
+        Game.getEntities().stream()
+            // Consider only entities that have a SkillComponent
+            .flatMap(e -> e.getComponent(AIComponent.class).stream())
+            .forEach(sc -> {
+                ((RangeTransition) ((AIComponent) sc).getTransitionAI()).setRange(range);
+            });
     }
 }
