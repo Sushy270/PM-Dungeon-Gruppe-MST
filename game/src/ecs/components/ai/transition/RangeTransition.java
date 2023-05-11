@@ -20,5 +20,9 @@ public class RangeTransition implements ITransition {
     public boolean isInFightMode(Entity entity) {
         return AITools.playerInRange(entity, range);
     }
+
+    /**
+     * @param range The range the variable range ist set to.
+     */
     public void setRange(int range) {this.range = range;}
 }

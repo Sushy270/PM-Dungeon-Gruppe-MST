@@ -101,6 +101,9 @@ public class XPComponent extends Component {
         if (this.callbackLevelUp != null) this.callbackLevelUp.onLevelUp(level);
     }
 
+    /**
+     * executes levelUp() in Hero class
+     */
     public void levelUp() {
         System.out.println("Level: " + currentLevel);
         Hero hero = (Hero) entity;

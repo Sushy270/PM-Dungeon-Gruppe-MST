@@ -21,13 +21,13 @@ public abstract class Component {
     public Component(Entity entity) {
         this.entity = entity;
         entity.addComponent(this);
-//        Logger componentLogger = Logger.getLogger(this.getClass().getName());
-//        componentLogger.info(
-//                "The component '"
-//                        + this.getClass().getSimpleName()
-//                        + "' was added to entity '"
-//                        + entity.getClass().getSimpleName()
-//                        + "'.");
+        Logger componentLogger = Logger.getLogger(this.getClass().getName());
+        componentLogger.info(
+                "The component '"
+                        + this.getClass().getSimpleName()
+                        + "' was added to entity '"
+                        + entity.getClass().getSimpleName()
+                        + "'.");
     }
 
     /**

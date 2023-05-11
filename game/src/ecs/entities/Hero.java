@@ -17,7 +17,7 @@ import tools.Constants;
  */
 public class Hero extends Entity {
 
-    private final int fireballCoolDown = 2;
+    private final int fireballCoolDown = 1;
     private final int invisibilityCoolDown = 20;
     private final int invisibilityDuration = 10;
     private final double speedSkillIncrease = 1.5;

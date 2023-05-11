@@ -19,14 +19,21 @@ public class ManaComponent extends Component{
         this.generateManaPoints = true;
     }
 
-    public void increaseManapoints(int value) {
+    private void increaseManapoints(int value) {
         currentPoints = Math.min(maxPoints, currentPoints + value);
     }
 
+    /**
+     *
+     * @param value The value current ManaPoints reduced by.
+     */
     public void reduceManaPoints(int value) {
         currentPoints = Math.max(0, currentPoints - value);
     }
 
+    /**
+     * Increases current ManaPoints in a time Frame given by Attribute
+     */
     public void generatePoints() {
         currentFramesTilManapoint--;
         if(currentFramesTilManapoint <= 0 && generateManaPoints){
@@ -36,9 +43,16 @@ public class ManaComponent extends Component{
         }
     }
 
+    /**
+     *
+     * @return return current ManaPoints
+     */
     public int getCurrentPoints() {
         return currentPoints;
     }
 
+    /**
+     * toggles boolean generateManaPoints
+     */
     public void toggleGenerateManaPoints(){generateManaPoints = !generateManaPoints;}
 }

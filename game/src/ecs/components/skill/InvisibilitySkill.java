@@ -136,7 +136,7 @@ public class InvisibilitySkill implements ISkillFunction {
     private void setAnimations(List<List<String>> paths) {
         ac.setIdleLeftPath(paths.get(0));
         ac.setIdleRightPath(paths.get(1));
-        vc.setMoceLeftPath(paths.get(2));
+        vc.setMoveLeftPath(paths.get(2));
         vc.setMoveRightPath(paths.get(3));
     }
 

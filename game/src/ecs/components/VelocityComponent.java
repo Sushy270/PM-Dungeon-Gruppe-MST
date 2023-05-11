@@ -145,7 +145,7 @@ public class VelocityComponent extends Component {
     /**
      * @param path Idleanimation faced left
      */
-    public void setMoceLeftPath(List<String> path) {
+    public void setMoveLeftPath(List<String> path) {
         moveLeftAnimation.setAnimationFrames(path);
     }
 

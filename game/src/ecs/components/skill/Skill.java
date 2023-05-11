@@ -3,8 +3,6 @@ package ecs.components.skill;
 import ecs.entities.Entity;
 import tools.Constants;
 
-import java.awt.*;
-
 public class Skill {
 
     private final ISkillFunction skillFunction;
@@ -50,15 +48,16 @@ public class Skill {
     }
     /**
      * @param skillFunction Function of this skill
+     * @param framesPerManaPoint time until one point is used up
      * @param mc ManaComponent of the Entity
      */
-    public Skill(ISkillFunction skillFunction, int framesPerManaComponent, ManaComponent mc) {
+    public Skill(ISkillFunction skillFunction, int framesPerManaPoint, ManaComponent mc) {
         this.skillFunction = skillFunction;
         this.coolDownInFrames = 0;
         this.currentCoolDownInFrames = 0;
         this.durationInFrames = 2;
         this.currentDurationInFrames = 0;
-        this.framesPerManaPoint = framesPerManaComponent;
+        this.framesPerManaPoint = framesPerManaPoint;
         this.mc = mc;
     }
 
@@ -162,6 +161,9 @@ public class Skill {
         increaseManaFrameCounter();
     }
 
+    /**
+     * increases/decreases random duration or cooldown
+     */
     public void increaseRandomValue() {
         if(mc == null) {
             int i = (int) (Math.random() * 2);
