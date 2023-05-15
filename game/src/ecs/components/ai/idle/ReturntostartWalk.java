@@ -29,6 +29,7 @@ public class ReturntostartWalk implements IIdleAI {
         this.breakTime = breakTimeInSeconds * Constants.FRAME_RATE;
     }
 
+    /**Finds de Position of the Entity*/
     private Point p(Entity entity){
         return ((PositionComponent)
             entity.getComponent(PositionComponent.class)
