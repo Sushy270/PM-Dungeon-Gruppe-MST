@@ -27,7 +27,7 @@ public class Save implements Serializable
         data.indexStartTile = currentLevel.getFloorTiles().indexOf(tempStartTile);
 
         // data serialisieren
-        try (FileOutputStream fos = new FileOutputStream("SaveState");
+        try (FileOutputStream fos = new FileOutputStream("SaveState.txt");
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(data); oos.close();
             System.out.println("File writen!");
@@ -41,7 +41,7 @@ public class Save implements Serializable
 	public void laden(LevelAPI levelAPI) throws FileNotFoundException
     {
         // SaveState auslesen
-        try (FileInputStream fis = new FileInputStream("SaveState");
+        try (FileInputStream fis = new FileInputStream("SaveState.txt");
              ObjectInputStream ois = new ObjectInputStream(fis)) {
             data = (Data) ois.readObject(); ois.close();
             System.out.println("File read!");

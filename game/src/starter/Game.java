@@ -42,7 +42,7 @@ import tools.Point;
 /** The heart of the framework. From here all strings are pulled. */
 public class Game extends ScreenAdapter implements IOnLevelLoader {
 
-    private final LevelSize LEVELSIZE = LevelSize.SMALL;
+    private final LevelSize LEVELSIZE = LevelSize.MEDIUM;
 
     /**
      * The batch is necessary to draw ALL the stuff. Every object that uses draw need to know the
@@ -216,38 +216,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
                     listeMumie.add(m);
                     break;
             }
-        }
-    }
-
-    /**This methode is used to despawn a random kind of monsters*/
-    public static void despawnMonster(){
-    switch (selectOneMonster) {
-            case (1) :
-                for (Entity entity : listeWolf) {
-                    Game.removeEntity(entity);
-                }
-                listeWolf.clear();
-                break;
-            case (2) :
-                for (Entity entity : listeZombie) {
-                    Game.removeEntity(entity);
-                }
-                listeZombie.clear();
-                break;
-            case (3) :
-                for (Entity entity : listeMumie) {
-                    Game.removeEntity(entity);
-                }
-                listeMumie.clear();
-                break;
-        }
-    }
-
-    public static void spawnOneZombie(){
-        if(despawnOrSpawn == 2) {
-            Zombie z = new Zombie();
-            listeZombie.add(z);
-            despawnOrSpawn = 3;
         }
     }
 

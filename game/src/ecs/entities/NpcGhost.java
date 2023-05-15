@@ -5,11 +5,8 @@ import ecs.components.*;
 import ecs.components.ai.AIComponent;
 import ecs.components.ai.fight.CollideAI;
 import ecs.components.ai.idle.GhostWalk;
-import ecs.components.ai.idle.ReturntostartWalk;
 import ecs.components.ai.transition.RangeTransition;
-import ecs.components.collision.GhostCollide;
 import graphic.Animation;
-import level.LevelAPI;
 
 public class NpcGhost extends Entity{
     private final float xSpeed = 0.4f;
