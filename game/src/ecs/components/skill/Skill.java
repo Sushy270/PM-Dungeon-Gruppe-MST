@@ -72,25 +72,19 @@ public class Skill {
             if (!isOnCoolDown()) {
                 if (!isAktive())
                     activateDuration();
-                    // Fähigkeit soll nicht direkt nach weniger als einer sekunde deaktiviert werden sollen
-                else if (durationInFrames - currentDurationInFrames > Constants.FRAME_RATE) {
+                else {
                     currentDurationInFrames = 0;
                     activateCoolDown();
                 }
-                else{return;}
                 skillFunction.execute(entity);
             }
         }
         else {
             if(mc.getCurrentPoints() > 0) {
-                if(!isAktive()) {
+                if(!isAktive())
                     aktivateManaFrameCounter();
-                }
-                // Fähigkeit soll nicht direkt nach weniger als einer sekunde deaktiviert werden sollen
-                else if (manaFramecounter > Constants.FRAME_RATE) {
+                else
                     manaFramecounter = 0;
-                }
-                else{return;}
                 mc.toggleGenerateManaPoints();
                 skillFunction.execute(entity);
             }

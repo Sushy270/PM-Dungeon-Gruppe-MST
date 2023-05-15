@@ -65,15 +65,15 @@ public class PlayerSystem extends ECS_System {
         // letzter Eintrag soll ausgeführt werden
         setVelocity(ksd);
 
-        if (Gdx.input.isKeyPressed(KeyboardConfig.INTERACT_WORLD.get()))
+        if (Gdx.input.isKeyJustPressed(KeyboardConfig.INTERACT_WORLD.get()))
             InteractionTool.interactWithClosestInteractable(ksd.e);
 
         // check skills
-        else if (Gdx.input.isKeyPressed(KeyboardConfig.FIRST_SKILL.get()))
+        else if (Gdx.input.isKeyJustPressed(KeyboardConfig.FIRST_SKILL.get()))
             ksd.pc.getSkillSlot1().ifPresent(skill -> skill.execute(ksd.e));
-        else if (Gdx.input.isKeyPressed(KeyboardConfig.SECOND_SKILL.get()))
+        else if (Gdx.input.isKeyJustPressed(KeyboardConfig.SECOND_SKILL.get()))
             ksd.pc.getSkillSlot2().ifPresent(skill -> skill.execute(ksd.e));
-        else if (Gdx.input.isKeyPressed(KeyboardConfig.THIRD_SKILL.get()))
+        else if (Gdx.input.isKeyJustPressed(KeyboardConfig.THIRD_SKILL.get()))
             ksd.pc.getSkillSlot3().ifPresent(skill -> skill.execute(ksd.e));
 
     }
