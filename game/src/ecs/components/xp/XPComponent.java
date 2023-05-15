@@ -2,14 +2,21 @@ package ecs.components.xp;
 
 import ecs.components.Component;
 import ecs.entities.Entity;
+import ecs.entities.Hero;
 
 public class XPComponent extends Component {
 
     private static final double LEVEL_1_XP = 100;
     private static final double FORMULA_SLOPE = 0.5;
-    private long currentLevel;
+    private long currentLevel = 0;
+    // currentCP ist being reset after levelUp
     private long currentXP;
+
+    // gibt die XP an die ein entity dropt wenn es stirbt.
+    // -1 als startwert, äquivalent zu null.
     private long lootXP = -1;
+
+    // Ibjekt, welches eine Methode beinhlated die die levelUo Aktion ausführen soll
     private ILevelUp callbackLevelUp;
 
     /**
@@ -89,8 +96,18 @@ public class XPComponent extends Component {
      *
      * @param level new level
      */
+    @Deprecated
     public void levelUp(long level) {
         if (this.callbackLevelUp != null) this.callbackLevelUp.onLevelUp(level);
+    }
+
+    /**
+     * executes levelUp() in Hero class
+     */
+    public void levelUp() {
+        System.out.println("Level: " + currentLevel);
+        Hero hero = (Hero) entity;
+        hero.levelUp();
     }
 
     /**

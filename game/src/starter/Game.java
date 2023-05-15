@@ -15,6 +15,8 @@ import controller.SystemController;
 import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
 import ecs.components.ai.idle.PatrouilleWalk;
+import ecs.components.ai.idle.RadiusWalk;
+import ecs.components.xp.XPComponent;
 import ecs.entities.*;
 
 import ecs.systems.*;
@@ -138,6 +140,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         save = new Save();
         try {
             save.laden(levelAPI);
+            this.onLevelLoad();
         } catch (FileNotFoundException e) {
             levelAPI.loadLevel(LEVELSIZE);
         }
@@ -160,7 +163,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         }
     }
 
-    boolean toggle = false;
     @Override
     public void onLevelLoad() {
         currentLevel = levelAPI.getCurrentLevel();
@@ -172,6 +174,8 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         despawnOrSpawn = (int) (Math.random()*2+1);
         spawnMonster();
         spawnTombstone();
+        getHero().ifPresent(this::increaseHeroXP);
+        save.speichern(currentLevel);
     }
 
     public void spawnTombstone(){
@@ -183,6 +187,15 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         else{
             t = null;
         }
+    }
+
+    private void increaseHeroXP(Entity hero) {
+        XPComponent xcp =
+            (XPComponent)
+                ((Hero)hero).getComponent(XPComponent.class)
+                    .orElseThrow(
+                        () -> new MissingComponentException("XPComponent"));
+        xcp.addXP(40);
     }
 
     /** Spawns a random number of monsters and types*/
@@ -204,7 +217,38 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
                     break;
             }
         }
-        save.speichern(currentLevel);
+    }
+
+    /**This methode is used to despawn a random kind of monsters*/
+    public static void despawnMonster(){
+    switch (selectOneMonster) {
+            case (1) :
+                for (Entity entity : listeWolf) {
+                    Game.removeEntity(entity);
+                }
+                listeWolf.clear();
+                break;
+            case (2) :
+                for (Entity entity : listeZombie) {
+                    Game.removeEntity(entity);
+                }
+                listeZombie.clear();
+                break;
+            case (3) :
+                for (Entity entity : listeMumie) {
+                    Game.removeEntity(entity);
+                }
+                listeMumie.clear();
+                break;
+        }
+    }
+
+    public static void spawnOneZombie(){
+        if(despawnOrSpawn == 2) {
+            Zombie z = new Zombie();
+            listeZombie.add(z);
+            despawnOrSpawn = 3;
+        }
     }
 
     /**This methode is used to despawn a random kind of monsters*/
@@ -381,6 +425,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         // https://stackoverflow.com/questions/52011592/libgdx-set-ortho-camera
     }
 
+    // creates Systems, but also decides in which order they are updated
     private void createSystems() {
         new VelocitySystem();
         new DrawSystem(painter);
@@ -391,5 +436,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         new XPSystem();
         new SkillSystem();
         new ProjectileSystem();
+        new ManaSystem();
+        new XPSystem();
     }
 }

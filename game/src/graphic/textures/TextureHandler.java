@@ -59,6 +59,7 @@ public class TextureHandler {
         Pattern pattern = Pattern.compile(regex);
         return getAvailablePaths().stream()
                 .filter(pattern.asPredicate())
+                .filter(Pattern.compile("^(?!.*?(?:bin|build)).*$").asPredicate())
                 .flatMap(this::getTexturesForPath)
                 .collect(Collectors.toList());
     }

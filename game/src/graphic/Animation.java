@@ -7,8 +7,8 @@ import java.util.List;
 /** A list of textures from an animation. */
 public class Animation {
 
-    /** The set of textures that build the animation. */
-    protected final List<String> animationFrames;
+    /** The set of textures(path) that build the animation. */
+    protected List<String> animationFrames;
 
     /** The count of textures for the animation. */
     protected final int frames;
@@ -81,5 +81,14 @@ public class Animation {
      */
     public List<String> getAnimationFrames() {
         return animationFrames;
+    }
+
+    /**
+     * Sets the List of animation frames.
+     *
+     * @param animationFrames List containing the paths of the single frames of the animation.
+     */
+    public void setAnimationFrames(List<String> animationFrames) {
+        this.animationFrames = animationFrames;
     }
 }

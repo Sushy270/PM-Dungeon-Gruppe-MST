@@ -109,4 +109,18 @@ public class AnimationComponent extends Component {
     public Animation getIdleRight() {
         return idleRight;
     }
+
+    /**
+     * @param path Idleanimation faced left
+     */
+    public void setIdleLeftPath(List<String> path) {
+        idleLeft.setAnimationFrames(path);
+    }
+
+    /**
+     * @param path Idleanimation faced right
+     */
+    public void setIdleRightPath(List<String> path) {
+        idleRight.setAnimationFrames(path);
+    }
 }

@@ -56,14 +56,7 @@ public class LevelAPI {
     LevelElement[][] tempLayout;
     int tempIndex;
     public void loadLevel(LevelSize size, DesignLabel label) {
-//        if(!toggle) {
-            currentLevel = gen.getLevel(label, size);
-//            tempLayout = currentLevel.getLayoutLE();
-//            Tile tempStartTile = currentLevel.getStartTile();
-//            currentLevel.getFloorTiles().indexOf(tempStartTile);
-//            toggle = !toggle;}
-//
-//        currentLevel = new TileLevel(tempLayout, label, tempIndex);
+        currentLevel = gen.getLevel(label, size);
         onLevelLoader.onLevelLoad();
         levelAPI_logger.info("A new level was loaded.");
     }
