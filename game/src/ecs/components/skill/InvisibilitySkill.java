@@ -44,14 +44,10 @@ public class InvisibilitySkill implements ISkillFunction {
     public void execute(Entity entity) {
         isAktive = !isAktive;
 
-        if(isAktive) {
+        if(isAktive)
             setAnimations(transparentPaths);
-            changeRangeEntities(0);
-        }
-        else {
+        else
             setAnimations(normalPaths);
-            changeRangeEntities(5);
-        }
     }
 
     private List<List<String>> createTransparents(List<List<String>> paths)
@@ -148,4 +144,6 @@ public class InvisibilitySkill implements ISkillFunction {
                 ((RangeTransition) ((AIComponent) sc).getTransitionAI()).setRange(range);
             });
     }
+
+    public boolean isAktive(){return isAktive;}
 }

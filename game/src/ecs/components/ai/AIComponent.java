@@ -7,9 +7,15 @@ import ecs.components.ai.idle.IIdleAI;
 import ecs.components.ai.idle.RadiusWalk;
 import ecs.components.ai.transition.ITransition;
 import ecs.components.ai.transition.RangeTransition;
+import ecs.components.skill.ISkillFunction;
+import ecs.components.skill.InvisibilitySkill;
+import ecs.components.skill.Skill;
+import ecs.components.skill.SkillComponent;
 import ecs.entities.Entity;
+import ecs.entities.Hero;
 import semanticAnalysis.types.DSLContextMember;
 import semanticAnalysis.types.DSLType;
+import starter.Game;
 
 /** AIComponent is a component that stores the idle and combat behavior of AI controlled entities */
 @DSLType(name = "ai_component")
@@ -45,8 +51,23 @@ public class AIComponent extends Component {
 
     /** Excecute the ai behavior */
     public void execute() {
-        if (transitionAI.isInFightMode(entity)) fightAI.fight(entity);
+        if (transitionAI.isInFightMode(entity) && heroVisible()) fightAI.fight(entity);
         else idleAI.idle(entity);
+    }
+
+    private boolean heroVisible()
+    {
+        if(!Game.getHero().isPresent())
+            return false;
+        Hero hero = (Hero) Game.getHero().get();
+        if(!hero.getComponent(SkillComponent.class).isPresent())
+            return false;
+        SkillComponent sc = (SkillComponent) hero.getComponent(SkillComponent.class).get();
+
+            return !sc.getSkillSet().stream()
+                    .map(skill -> skill.getSkill())
+                    .filter(skill -> skill.getClass().isInstance(InvisibilitySkill.class))
+                    .anyMatch(skill -> ((InvisibilitySkill) skill).isAktive());
     }
 
     /**

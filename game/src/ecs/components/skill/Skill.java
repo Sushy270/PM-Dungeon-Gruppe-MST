@@ -180,4 +180,14 @@ public class Skill {
             System.out.println(skillFunction.getClass().getSimpleName() + " - Decreased Mana Consumption: point/" + ((int)((double)framesPerManaPoint/Constants.FRAME_RATE*100))/100.0 + "s");
         }
     }
+
+    /**
+     * returns the spezificSkill of the Skill
+     *
+     * @return the ISkillFunction
+     */
+    public ISkillFunction getSkill()
+    {
+        return skillFunction;
+    }
 }
